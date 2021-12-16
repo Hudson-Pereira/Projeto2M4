@@ -4,6 +4,8 @@ import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { Usuario, Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { PrismaModule } from 'src/prisma/prisma.module';
+import { JwtPayload } from 'src/auth/jwt.strategy';
 
 @Injectable()
 export class UsuarioService {
@@ -35,19 +37,34 @@ export class UsuarioService {
     return user; //retornando usuario quando validado
   }
 
+  async validadeUser(payload: JwtPayload): Promise<Usuario> { //validacao do usuario pelo payload
+    const user = await this.prisma.usuario.findFirst({
+      where: 
+      { email: payload.email,
+      }
+    })
+
+    if(!user) {
+      throw new HttpException('Token inválido.', HttpStatus.UNAUTHORIZED);
+    }
+
+    return user;
+  }
+
   findAll() {
     return `This action returns all usuario`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} usuario`;
+  async findOne(id: number): Promise<Usuario> {
+    return await this.prisma.usuario.findUnique({where: {id}});
   }
 
-  update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
-    return `This action updates a #${id} usuario`;
+  async update(id: number, data: UpdateUsuarioDto): Promise<Usuario> {
+    data.senha = await bcrypt.hash(data.senha,10)
+    return await this.prisma.usuario.update({data, where: {id}});
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} usuario`;
+  async remove(id: number): Promise<Usuario> {
+    return await this.prisma.usuario.delete({where: {id}});
   }
 }

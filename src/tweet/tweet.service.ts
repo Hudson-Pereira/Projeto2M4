@@ -16,15 +16,15 @@ export class TweetService {
     return await this.prisma.tweet.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} tweet`;
+  async findOne(id: number): Promise<Tweet> {
+    return await this.prisma.tweet.findUnique({where: {id}});
   }
 
-  update(id: number, updateTweetDto: UpdateTweetDto) {
-    return `This action updates a #${id} tweet`;
+  async update(id: number, data: UpdateTweetDto): Promise<Tweet> {
+    return await this.prisma.tweet.update({data, where: {id}});
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} tweet`;
+  async remove(id: number): Promise<Tweet> {
+    return await this.prisma.tweet.delete({where: {id}});
   }
 }
