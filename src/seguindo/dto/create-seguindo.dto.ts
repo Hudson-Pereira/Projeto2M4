@@ -1,4 +1,8 @@
+import { IsNotEmpty, IsString } from "class-validator";
+
 export class CreateSeguindoDto {
-  idSeguindo: string;
-  usuarioid: number;
+  @IsNotEmpty()
+  @IsString()
+  idSeguindo: number;
+ 
 }

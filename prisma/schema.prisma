@@ -15,7 +15,7 @@ model Usuario {
   nome        String 
   imagem      String
   bio         String
-  nasc        String
+  nasc        Int
   email       String        @unique
   senha       String
   seguidores  Seguidores[]
@@ -26,25 +26,23 @@ model Usuario {
 }
 
 model Tweet {
-  id         Int            @default(autoincrement()) @id @unique
-  texto      String
-  emoji      String
-  data_post  DateTime       @default(now())
-  curtidas   Int
-  autor      Usuario        @relation(fields: [usuarioid], references: [id])
-  usuarioid  Int
+  id          Int            @default(autoincrement()) @id @unique
+  texto       String
+  emoji       String
+  data_post   DateTime       @default(now())
+  curtidas    Int
+  autor       Usuario        @relation(fields: [usuarioid], references: [id])
+  usuarioid   Int
 }
 
 model Seguindo {
   id          Int           @default(autoincrement()) @id @unique
-  idSeguindo  String
-  user        Usuario       @relation(fields: [usuarioid], references: [id])
-  usuarioid   Int
+  usuarioid   Usuario       @relation(fields: [idSeguindo], references: [id])
+  idSeguindo  Int
 }
 
 model Seguidores {
   id          Int           @default(autoincrement()) @id @unique
-  idSeguidor  String
-  user        Usuario       @relation(fields: [usuarioid], references: [id])
-  usuarioid   Int
+  usuarioid   Usuario       @relation(fields: [idSeguidor], references: [id])
+  idSeguidor  Int
 }

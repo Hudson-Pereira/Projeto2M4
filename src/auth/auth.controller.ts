@@ -10,11 +10,11 @@ export class AuthController {
     @Post()
     async login(@Body() data: LoginDto){
         return this.authService.login(data);
-    } //autenticar
+    } //autenticar o login
 
     @Get()
     @UseGuards(AuthGuard()) //endpoint para autenticacao
     async checkLogin(){
-        return 'logado';
+        return 'Usuário logado';
     } //confirmacao de autenticacao
 }

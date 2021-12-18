@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 export interface JwtPayload {
-  email: string;
+  email: string; //inserimos as informacoes que serao utilizadas para validacao do user e criacao do token
 }
 
 @Injectable()
@@ -15,6 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
   validate(payload: JwtPayload) {
+    //pode-se adicionar validacoes nessa parte
     return payload;
   }
 }

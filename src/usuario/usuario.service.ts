@@ -13,8 +13,16 @@ export class UsuarioService {
 
   async create(data: Prisma.UsuarioCreateInput): Promise<Usuario> { //criando usuario com o prisma
     data.senha = await bcrypt.hash(data.senha,10)
+    try {
+      const createdUser = await this.prisma.usuario.create({data});
+      createdUser.senha = undefined;
+      return createdUser;
+    } catch (error) {
+      throw new HttpException('E-mail já cadastrado.', HttpStatus.BAD_REQUEST);
+    }
+    
   //pegando a senha e passando pelo bcrypt embaralhando 10x  
-    return await this.prisma.usuario.create({ data });
+    // return await this.prisma.usuario.create({ data });
   }
 
   async findByLogin(login: CreateUsuarioDto): Promise<Usuario>{ //criando login
@@ -37,7 +45,7 @@ export class UsuarioService {
     return user; //retornando usuario quando validado
   }
 
-  async validadeUser(payload: JwtPayload): Promise<Usuario> { //validacao do usuario pelo payload
+  async validateUser(payload: JwtPayload): Promise<Usuario> { //validacao do usuario pelo payload
     const user = await this.prisma.usuario.findFirst({
       where: 
       { email: payload.email,
@@ -51,8 +59,8 @@ export class UsuarioService {
     return user;
   }
 
-  findAll() {
-    return `This action returns all usuario`;
+  findAll():Promise<Usuario[]> {
+    return this.prisma.usuario.findMany();
   }
 
   async findOne(id: number): Promise<Usuario> {
