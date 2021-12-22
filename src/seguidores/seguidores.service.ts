@@ -8,7 +8,7 @@ import { Seguidores, Prisma } from '@prisma/client';
 export class SeguidoresService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: Prisma.SeguidoresCreateInput): Promise<Seguidores> {
+  async create(data: Prisma.SeguidoresUncheckedCreateInput): Promise<Seguidores> {
     return await this.prisma.seguidores.create({data});
   }
 

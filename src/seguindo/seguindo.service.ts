@@ -8,7 +8,7 @@ import { Seguindo, Prisma } from '@prisma/client';
 export class SeguindoService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: Prisma.SeguindoCreateInput): Promise<Seguindo> {
+  async create(data: Prisma.SeguindoUncheckedCreateInput): Promise<Seguindo> {
     return await this.prisma.seguindo.create({data});
   }
 

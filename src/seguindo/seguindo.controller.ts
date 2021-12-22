@@ -1,13 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { SeguindoService } from './seguindo.service';
 import { CreateSeguindoDto } from './dto/create-seguindo.dto';
 import { UpdateSeguindoDto } from './dto/update-seguindo.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('seguindo')
 export class SeguindoController {
   constructor(private readonly seguindoService: SeguindoService) {}
 
-  @Post()
+  @Post()  
+  @UseGuards(AuthGuard('jwt'))
   create(@Body() createSeguindoDto: CreateSeguindoDto) {
     return this.seguindoService.create(createSeguindoDto);
   }
@@ -23,11 +25,13 @@ export class SeguindoController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard('jwt'))
   update(@Param('id') id: string, @Body() updateSeguindoDto: UpdateSeguindoDto) {
     return this.seguindoService.update(+id, updateSeguindoDto);
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
   remove(@Param('id') id: string) {
     return this.seguindoService.remove(+id);
   }
